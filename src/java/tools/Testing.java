@@ -14,8 +14,12 @@ import controllers.ExperienceController;
 import controllers.LoginRegisterController;
 import controllers.OrganizationController;
 import controllers.WorkAssignmentController;
+import daos.CertificationDAO;
+import daos.EducationHistoryDAO;
+import daos.EmployeeLanguageDAO;
 import daos.LoginRegisterDAO;
 import daos.EmployeeRoleDAO;
+import daos.EmployeeSkillDAO;
 import daos.GeneralDAO;
 import icontrollers.IEmployeeController;
 import icontrollers.ILoginRegisterController;
@@ -34,8 +38,11 @@ import models.Account;
 import models.Award;
 import models.Certification;
 import models.Education;
+import models.EducationHistory;
 import models.Employee;
+import models.EmployeeLanguage;
 import models.EmployeeRole;
+import models.EmployeeSkill;
 import models.Organization;
 import models.Role;
 import org.hibernate.SessionFactory;
@@ -101,7 +108,7 @@ public class Testing {
 //        System.out.println(factory);
 //        IGeneralDAO<Education> igdao = new GeneralDAO<>(HibernateUtil.getSessionFactory(), Education.class);
 //        System.out.println(igdao.getAll());
-        
+        IGeneralDAO<Education> edudao = new GeneralDAO(factory, Education.class);
         IGeneralDAO<Organization> igdao = new GeneralDAO<>(factory, Organization.class);
 //        System.out.println(igdao.getAll());
         AwardController ac = new AwardController(factory);
@@ -118,7 +125,44 @@ public class Testing {
         ExperienceController ec = new ExperienceController(factory);
 //        System.out.println(ec.save("LOMBA", "2019", "5"));
         
+//        for (Education edu : edudao.getAll()) {
+//            System.out.println("Pendidikan");
+//            System.out.println("University"+edu.getUniversity().getName());
+//            System.out.println("Major"+edu.getMajor().getName());
+//        }
+        //MEMANGGIL UNVERSITY DARI EDUCATION
+//          Education education = edudao.getById(1);
+//          System.out.println("University"+education.getUniversity().getName());
+//          System.out.println("Major"+education.getMajor().getName());
 
+        IGeneralDAO<Employee> emDAO = new GeneralDAO(factory, Employee.class);
+        Employee employee = emDAO.getById("5");
+//        System.out.println("University : " + employee.getEducationHistoryList());
+//        EducationHistoryDAO edao = new EducationHistoryDAO(factory);
+//        int no = 1;
+//        for (EducationHistory edus : edao.getEducationHistory("3")) {
+//            System.out.println("Sekolah Ke-"+no);
+//            System.out.println(edus.getEducation().getUniversity().getName());
+//            System.out.println(edus.getEducation().getMajor().getName());
+//            System.out.println(edus.getEducation().getDegree().getName());
+//            System.out.println(edus.getEducation().getId());
+//        }
+//        System.out.println(edao.getHistory());
+
+//        EmployeeSkillDAO edao = new EmployeeSkillDAO(factory);
+//        for (EmployeeSkill edus : edao.getEmployeeSkill("2")) {
+//            System.out.println("Hasil : ");
+//            System.out.println(edus.getSkill().getCategory().getId());
+//            System.out.println(edus.getSkill().getCategory().getName());
+//            System.out.println("Hasil : ");
+//            System.out.println(edus.getSkill().getId());
+//            System.out.println(edus.getSkill().getName());
+//        }
+
+        
+        IGeneralDAO<Organization> emDAO2 = new GeneralDAO(factory, Organization.class);
+//        System.out.println(emDAO2.getById(Integer.parseInt("3")).getPosittion());
+        
 
     }
     
