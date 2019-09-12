@@ -5,9 +5,11 @@
  */
 package controllers;
 
+import icontrollers.IOrganizationController;
 import daos.GeneralDAO;
 import idaos.IGeneralDAO;
-import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import models.Employee;
 import models.Organization;
@@ -17,41 +19,44 @@ import org.hibernate.SessionFactory;
  *
  * @author hp
  */
-public class OrganizationController {
-     private IGeneralDAO<Organization> igdao;
-     private IGeneralDAO<Employee> igdao2;
+public class OrganizationController implements IOrganizationController {
+
+    private IGeneralDAO<Organization> igdao;
+
     public OrganizationController(SessionFactory factory) {
         igdao = new GeneralDAO<Organization>(factory, Organization.class);
-        igdao2 = new GeneralDAO<>(factory, Employee.class);
     }
 
-    
+    @Override
     public List<Organization> getAll() {
         return igdao.getAll();
     }
 
-    
+    @Override
     public Organization getById(String id) {
         return igdao.getById(id);
     }
-    
-    public String save(String id) {
+
+    @Override
+    public String save(String name, String position, String startPeriod, String endPeriod, String employee) {
         String result = "";
-        Organization organization = new Organization();
-        Employee employee = igdao2.getById(id);
-        Date date = new Date(0);
-        organization.setId(Integer.parseInt(id));
-        organization.setName(id);
-        organization.setPosittion(result);
-        organization.setStartPeriod(date);
-        organization.setEndPeriod(date);
-        organization.setEmployee(employee);
-        if(igdao.saveOrDelete(organization, true)){
-            result ="Data Berhasil Disimpan";
-        }else{
-            result ="Maaf Data Gagal Disimpan";
+
+        try {
+            Date speriod = new SimpleDateFormat("yyyy-MM-dd").parse(startPeriod);
+            Date eperiod = new SimpleDateFormat("yyyy-MM-dd").parse(endPeriod);
+            Organization organization = new Organization(name, position, speriod, eperiod, new Employee(employee));
+
+            if (igdao.saveOrDelete(organization, true)) {
+                result = "Save data berhasil";
+            } else {
+                result = "Save data gagal";
+            }
+        } catch (Exception e) {
+            result = "Save data error";
         }
+
         return result;
+
     }
 
 }

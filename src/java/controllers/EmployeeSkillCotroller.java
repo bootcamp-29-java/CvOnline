@@ -5,6 +5,7 @@
  */
 package controllers;
 
+import icontrollers.IEmployeeSkillController;
 import daos.GeneralDAO;
 import idaos.IGeneralDAO;
 import java.util.List;
@@ -17,36 +18,35 @@ import org.hibernate.SessionFactory;
  *
  * @author hp
  */
-public class EmployeeSkillCotroller {
+public class EmployeeSkillCotroller implements IEmployeeSkillController {
     private IGeneralDAO<EmployeeSkill> igdao;
-    private IGeneralDAO<Employee> igdao2;
 
     public EmployeeSkillCotroller(SessionFactory factory) {
         igdao = new GeneralDAO<EmployeeSkill>(factory, EmployeeSkill.class);
-        igdao2 = new GeneralDAO<>(factory, Employee.class);
     }
-
     
+    @Override
     public List<EmployeeSkill> getAll() {
         return igdao.getAll();
     }
-
     
+    @Override
     public EmployeeSkill getById(String id) {
         return igdao.getById(id);
     }   
-     public String saveOrDelete(String id, String score, Skill skill) {
+    @Override
+     public String save(int score, String skill, String employee) {
         String result = "";
-        EmployeeSkill employeeSkill = new EmployeeSkill(); 
-        Employee employee = igdao2.getById(id);
-        employeeSkill.setId(Integer.parseInt(id));
-        employeeSkill.setScore(0);
-        employeeSkill.setSkill(skill);
-        employeeSkill.setEmployee(employee);
-        if(igdao.saveOrDelete(employeeSkill, true)){
-            result ="Data Berhasil Disimpan";
-        }else{
-            result ="Maaf Data Gagal Disimpan";
+        try {
+            EmployeeSkill el = new EmployeeSkill(score, new Skill(Integer.parseInt(skill)), new Employee(employee));
+            
+            if (igdao.saveOrDelete(el, true)) {
+                result = "Save data berhasil";
+            } else {
+                result = "Save data gagal";
+            }
+        } catch (Exception e) {
+            result = "Save data error";
         }
         return result;
     }

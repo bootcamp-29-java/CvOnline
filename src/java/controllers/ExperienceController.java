@@ -5,6 +5,7 @@
  */
 package controllers;
 
+import icontrollers.IExperienceController;
 import daos.GeneralDAO;
 import idaos.IGeneralDAO;
 import java.sql.Date;
@@ -17,37 +18,36 @@ import org.hibernate.SessionFactory;
  *
  * @author hp
  */
-public class ExperienceController {
+public class ExperienceController implements IExperienceController {
     private IGeneralDAO<Experience> igdao;
-     private IGeneralDAO<Employee> igdao2;
+    
     public ExperienceController(SessionFactory factory) {
         igdao = new GeneralDAO<Experience>(factory, Experience.class);
-        igdao2 = new GeneralDAO<>(factory, Employee.class);
     }
-
     
+    @Override
     public List<Experience> getAll() {
         return igdao.getAll();
     }
-
     
+    @Override
     public Experience getById(String id) {
         return igdao.getById(id);
     }
     
-    public String save(String id, String date1) {
+    @Override
+    public String save(String name, String date, String employee) {
         String result = "";
-        Experience experience = new Experience();
-        Employee employee = igdao2.getById(id);
-        Date date = new Date(0);
-        experience.setId(Integer.parseInt(id));
-        experience.setName(id);
-        experience.setDate(date1);
-        experience.setEmployee(employee);        
-        if(igdao.saveOrDelete(experience, true)){
-            result ="Data Berhasil Disimpan";
-        }else{
-            result ="Maaf Data Gagal Disimpan";
+        try {
+            Experience experience = new Experience(name, date, new Employee(employee));
+            
+            if (igdao.saveOrDelete(experience, true)) {
+                result = "Save data berhasil";
+            } else {
+                result = "Save data gagal";
+            }
+        } catch (Exception e) {
+            result = "Save data error";
         }
         return result;
     }

@@ -5,8 +5,15 @@
  */
 package tools;
 
+import controllers.AwardController;
+import controllers.CertificationController;
 import controllers.EmployeeController;
+import controllers.EmployeeLanguageController;
+import controllers.EmployeeSkillCotroller;
+import controllers.ExperienceController;
 import controllers.LoginRegisterController;
+import controllers.OrganizationController;
+import controllers.WorkAssignmentController;
 import daos.LoginRegisterDAO;
 import daos.EmployeeRoleDAO;
 import daos.GeneralDAO;
@@ -24,9 +31,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import models.Account;
+import models.Award;
+import models.Certification;
 import models.Education;
 import models.Employee;
 import models.EmployeeRole;
+import models.Organization;
 import models.Role;
 import org.hibernate.SessionFactory;
 
@@ -88,9 +98,28 @@ public class Testing {
 //          System.out.println(iec.save("2", "khrisna", "Khrisna", "accountgame607@gmail.com", "Klaten ", "2019-09-03", "Male", "WNI","image/default-image.png", false));
 //        ILoginRegisterController ilrc = new LoginRegisterController(factory);
 //        System.out.println(ilrc.updateByToken("9ekeZyz0NRfzQ9LkohXI", "Mustofa98"));
-        System.out.println(factory);
-        IGeneralDAO<Education> igdao = new GeneralDAO<>(HibernateUtil.getSessionFactory(), Education.class);
-        System.out.println(igdao.getAll());
+//        System.out.println(factory);
+//        IGeneralDAO<Education> igdao = new GeneralDAO<>(HibernateUtil.getSessionFactory(), Education.class);
+//        System.out.println(igdao.getAll());
+        
+        IGeneralDAO<Organization> igdao = new GeneralDAO<>(factory, Organization.class);
+//        System.out.println(igdao.getAll());
+        AwardController ac = new AwardController(factory);
+        CertificationController c = new CertificationController(factory);
+//        System.out.println(c.save("asd", 1, "3"));
+        OrganizationController o = new OrganizationController(factory);
+//        System.out.println(o.save("asd", "ketua", "2016-06-16", "2017-09-19", "5"));
+        WorkAssignmentController wac = new WorkAssignmentController(factory);
+//        System.out.println(wac.saveOrDelete("asd", "asd", "2019-05-12", "2019-09-12", "3"));
+        EmployeeLanguageController elc = new EmployeeLanguageController(factory);
+//        System.out.println(elc.save("in", "5"));
+        EmployeeSkillCotroller esc =  new EmployeeSkillCotroller(factory);
+//        System.out.println(esc.save(80, "3", "5"));
+        ExperienceController ec = new ExperienceController(factory);
+//        System.out.println(ec.save("LOMBA", "2019", "5"));
+        
+
+
     }
     
 }

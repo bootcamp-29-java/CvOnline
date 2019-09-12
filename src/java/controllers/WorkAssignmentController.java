@@ -5,9 +5,11 @@
  */
 package controllers;
 
+import icontrollers.IWorkAssignmentController;
 import daos.GeneralDAO;
 import idaos.IGeneralDAO;
-import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import models.Employee;
 import models.WorkAssignment;
@@ -17,43 +19,42 @@ import org.hibernate.SessionFactory;
  *
  * @author hp
  */
-public class WorkAssignmentController {
+public class WorkAssignmentController implements IWorkAssignmentController {
 
     private IGeneralDAO<WorkAssignment> igdao;
-    private IGeneralDAO<Employee> igdao2;
 
 
     public WorkAssignmentController(SessionFactory factory) {
         igdao = new GeneralDAO<WorkAssignment>(factory, WorkAssignment.class);
-        igdao2 = new GeneralDAO<Employee>(factory, Employee.class);
-        
     }
 
+    @Override
     public List<WorkAssignment> getAll() {
         return igdao.getAll();
     }
 
+    @Override
     public WorkAssignment getById(String id) {
         return igdao.getById(id);
     }
 
-    public String saveOrDelete(String id) {
+    @Override
+    public String saveOrDelete(String company, String jobDescription,String startDate,String endDate,String employee) {
         String result = "";
-        WorkAssignment wa = new WorkAssignment();
-        Employee employee = igdao2.getById(id);
-        Date date = new Date(0);
-        wa.setId(Integer.parseInt(id));
-        wa.setCompany(result);
-        wa.setPosition(result);
-        wa.setJobDescription(result);
-        wa.setStartDate(date);
-        wa.setEndDate(date);
-        wa.setEmployee(employee);        
-        if (igdao.saveOrDelete(wa, true)) {
-            result = "Data Berhasil Disimpan";
-        } else {
-            result = "Maaf Data Gagal Disimpan";
+        try {
+            Date sdate = new SimpleDateFormat("yyyy-MM-dd").parse(startDate);
+            Date edate = new SimpleDateFormat("yyyy-MM-dd").parse(endDate);
+            WorkAssignment wa = new WorkAssignment(company, jobDescription, sdate, edate, new Employee(employee));
+            
+            if (igdao.saveOrDelete(wa, true)) {
+                result = "Save data berhasil";
+            } else {
+                result = "Save data gagal";
+            }
+        } catch (Exception e) {
+            result = "Save data error";
         }
+
         return result;
     }    
 }

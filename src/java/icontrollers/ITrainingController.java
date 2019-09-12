@@ -3,21 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controllers;
+package icontrollers;
 
 import java.util.List;
-import models.Religion;
+import models.Training;
 
 /**
  *
  * @author hp
  */
-public interface IReligionController {
+public interface ITrainingController {
 
-    List<Religion> getAll();
+    List<Training> getAll();
 
-    public Religion getByName(String name);
+    Training getById(String id);
 
-    Religion getById(String id);
-
+    String save(String name, String start_date, String end_date, String employee);
+    
 }

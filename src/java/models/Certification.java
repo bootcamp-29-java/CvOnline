@@ -65,6 +65,13 @@ public class Certification implements Serializable {
         this.code = code;
     }
 
+    public Certification(String code, byte[] attachment, Certificate certificate, Employee employee) {
+        this.code = code;
+        this.attachment = attachment;
+        this.certificate = certificate;
+        this.employee = employee;
+    }
+
     public Integer getId() {
         return id;
     }

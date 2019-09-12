@@ -65,6 +65,13 @@ public class EducationHistory implements Serializable {
         this.gpa = gpa;
     }
 
+    public EducationHistory(String gpa, byte[] attachment, Education education, Employee employee) {
+        this.gpa = gpa;
+        this.attachment = attachment;
+        this.education = education;
+        this.employee = employee;
+    }
+
     public Integer getId() {
         return id;
     }

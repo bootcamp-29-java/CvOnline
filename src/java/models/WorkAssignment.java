@@ -79,6 +79,14 @@ public class WorkAssignment implements Serializable {
         this.endDate = endDate;
     }
 
+    public WorkAssignment(String company, String jobDescription, Date startDate, Date endDate, Employee employee) {
+        this.company = company;
+        this.jobDescription = jobDescription;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.employee = employee;
+    }
+
     public Integer getId() {
         return id;
     }

@@ -78,6 +78,14 @@ public class Organization implements Serializable {
         this.endPeriod = endPeriod;
     }
 
+    public Organization(String name, String posittion, Date startPeriod, Date endPeriod, Employee employee) {
+        this.name = name;
+        this.posittion = posittion;
+        this.startPeriod = startPeriod;
+        this.endPeriod = endPeriod;
+        this.employee = employee;
+    }
+
     public Integer getId() {
         return id;
     }

@@ -5,6 +5,7 @@
  */
 package controllers;
 
+import icontrollers.IReligionController;
 import daos.GeneralDAO;
 import idaos.IGeneralDAO;
 import java.util.List;
@@ -22,7 +23,6 @@ public class ReligionController implements IReligionController {
         igdao = new GeneralDAO<Religion>(factory, Religion.class);
         
     }
-
     
     @Override
     public List<Religion> getAll() {

@@ -5,9 +5,11 @@
  */
 package controllers;
 
+import icontrollers.IEducationHistoryController;
 import daos.GeneralDAO;
 import idaos.IGeneralDAO;
 import java.util.List;
+import models.Education;
 import models.EducationHistory;
 import models.Employee;
 import org.hibernate.SessionFactory;
@@ -16,39 +18,40 @@ import org.hibernate.SessionFactory;
  *
  * @author hp
  */
-public class EducationHistoryController {
-     private IGeneralDAO<EducationHistory> igdao;
-     private IGeneralDAO<Employee> igdao2;
+public class EducationHistoryController implements IEducationHistoryController {
+
+    private IGeneralDAO<EducationHistory> igdao;
+
     public EducationHistoryController(SessionFactory factory) {
         igdao = new GeneralDAO<EducationHistory>(factory, EducationHistory.class);
-        igdao2 = new GeneralDAO<>(factory, Employee.class);
     }
 
-    
+    @Override
     public List<EducationHistory> getAll() {
         return igdao.getAll();
     }
 
-    
+    @Override
     public EducationHistory getById(String id) {
         return igdao.getById(id);
     }
-    
-    public String save(String id, String gpa, String attachment) {
+
+    @Override
+    public String save(String gpa, byte[] attachment, String education, String employee) {
         String result = "";
-        EducationHistory history = new EducationHistory();
-        Employee employee = igdao2.getById(id);
-        history.setId(Integer.parseInt(id));
-        history.setGpa(gpa);
-        history.setAttachment(attachment);
-        history.setEmployee(employee);
-        if(igdao.saveOrDelete(history, true)){
-            result ="Data Berhasil Disimpan";
-        }else{
-            result ="Maaf Data Gagal Disimpan";
+        try {
+            EducationHistory eh = new EducationHistory(gpa, attachment, new Education(Integer.parseInt(gpa)), new Employee(employee));
+
+            if (igdao.saveOrDelete(eh, true)) {
+                result = "Save data berhasil";
+            } else {
+                result = "Save data gagal";
+            }
+        } catch (Exception e) {
+            result = "Save data error";
         }
+        
         return result;
     }
 
-    
 }

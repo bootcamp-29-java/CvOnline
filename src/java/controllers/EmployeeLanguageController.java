@@ -5,6 +5,7 @@
  */
 package controllers;
 
+import icontrollers.IEmployeeLanguageController;
 import daos.GeneralDAO;
 import idaos.IGeneralDAO;
 import java.util.List;
@@ -17,39 +18,39 @@ import org.hibernate.SessionFactory;
  *
  * @author hp
  */
-public class EmployeeLanguageController {
+public class EmployeeLanguageController implements IEmployeeLanguageController {
 
     private IGeneralDAO<EmployeeLanguage> igdao;
-    private IGeneralDAO<Employee> igdao2;
-    private IGeneralDAO<Language> ilang;
 
     public EmployeeLanguageController(SessionFactory factory) {
         igdao = new GeneralDAO<EmployeeLanguage>(factory, EmployeeLanguage.class);
-        igdao2 = new GeneralDAO<Employee>(factory, Employee.class);
-        ilang = new GeneralDAO<Language>(factory, Language.class);
     }
 
+    @Override
     public List<EmployeeLanguage> getAll() {
         return igdao.getAll();
     }
 
+    @Override
     public EmployeeLanguage getById(String id) {
         return igdao.getById(id);
     }
 
-    public String saveOrDelete(String id) {
+    @Override
+    public String save(String language, String employee) {
         String result = "";
-        EmployeeLanguage language = new EmployeeLanguage();
-        Employee employee = igdao2.getById(id);
-        Language language1 = ilang.getById(id);
-        language.setId(Integer.parseInt(id));
-        language.setEmployee(employee);
-        language.setLanguage(language1);
-        if (igdao.saveOrDelete(language, true)) {
-            result = "Data Berhasil Disimpan";
-        } else {
-            result = "Maaf Data Gagal Disimpan";
+        try {
+            EmployeeLanguage el = new EmployeeLanguage(new Language(language), new Employee(employee));
+            
+            if (igdao.saveOrDelete(el, true)) {
+                result = "Save data berhasil";
+            } else {
+                result = "Save data gagal";
+            }
+        } catch (Exception e) {
+            result = "Save data error";
         }
+        
         return result;
     }
 }

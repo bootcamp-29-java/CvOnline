@@ -73,6 +73,13 @@ public class Training implements Serializable {
         this.endDate = endDate;
     }
 
+    public Training(String name, Date startDate, Date endDate, Employee employee) {
+        this.name = name;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.employee = employee;
+    }
+
     public Integer getId() {
         return id;
     }

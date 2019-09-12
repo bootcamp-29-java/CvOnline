@@ -5,6 +5,7 @@
  */
 package controllers;
 
+import icontrollers.IAwardController;
 import daos.GeneralDAO;
 import idaos.IGeneralDAO;
 import java.sql.Date;
@@ -17,39 +18,39 @@ import org.hibernate.SessionFactory;
  *
  * @author hp
  */
-public class AwardController {
+public class AwardController implements IAwardController {
     
     private IGeneralDAO<Award> igdao;
-     private IGeneralDAO<Employee> igdao2;
+    
     public AwardController(SessionFactory factory) {
         igdao = new GeneralDAO<Award>(factory, Award.class);
-        igdao2 = new GeneralDAO<>(factory, Employee.class);
     }
 
-    
+    @Override
     public List<Award> getAll() {
         return igdao.getAll();
     }
-
     
+    @Override
     public Award getById(String id) {
         return igdao.getById(id);
     }
     
-    public String save(String id,String name, String date1) {
+    @Override
+    public String save(String name,String date, String employee) {
         String result = "";
-        Award award = new Award();
-        Employee employee = igdao2.getById(id);
-        Date date = new Date(0);
-        award.setId(Integer.parseInt(id));
-        award.setName(name);
-        award.setDate(date1);
-        award.setEmployee(employee);
-        if(igdao.saveOrDelete(award, true)){
-            result ="Data Berhasil Disimpan";
-        }else{
-            result ="Maaf Data Gagal Disimpan";
+        try {
+            Award award = new Award(name, date, new Employee(employee));
+            
+            if (igdao.saveOrDelete(award, true)) {
+                result = "Save data berhasil";
+            } else {
+                result = "Save data gagal";
+            }
+        } catch (Exception e) {
+            result = "Save data error";
         }
+
         return result;
     }
     

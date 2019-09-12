@@ -63,6 +63,12 @@ public class Award implements Serializable {
         this.date = date;
     }
 
+    public Award(String name, String date, Employee employee) {
+        this.name = name;
+        this.date = date;
+        this.employee = employee;
+    }
+
     public Integer getId() {
         return id;
     }
