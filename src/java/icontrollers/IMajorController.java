@@ -3,14 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package daos;
+package icontrollers;
+
+import java.util.List;
+import models.Major;
 
 /**
  *
- * @author Lenovo
+ * @author hp
  */
-public interface IEmployeeDAO {
+public interface IMajorController {
 
-    public String genId();
+    List<Major> getAll();
+
+    Major getById(String id);
     
 }

@@ -18,10 +18,10 @@ import org.hibernate.SessionFactory;
  */
 public class ReligionController implements IReligionController {
     
-    private IGeneralDAO<Religion> igdao;     
+    private IGeneralDAO<Religion> igdao;
+    
     public ReligionController(SessionFactory factory) {
         igdao = new GeneralDAO<Religion>(factory, Religion.class);
-        
     }
     
     @Override

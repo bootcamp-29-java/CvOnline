@@ -5,6 +5,7 @@
  */
 package daos;
 
+import idaos.IEmployeeDAO;
 import models.Employee;
 import org.hibernate.Criteria;
 import org.hibernate.Query;

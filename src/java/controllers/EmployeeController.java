@@ -7,7 +7,7 @@ package controllers;
 
 import daos.EmployeeDAO;
 import daos.GeneralDAO;
-import daos.IEmployeeDAO;
+import idaos.IEmployeeDAO;
 import icontrollers.IEmployeeController;
 import idaos.IGeneralDAO;
 import java.text.SimpleDateFormat;
