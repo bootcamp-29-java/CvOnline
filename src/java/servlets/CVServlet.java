@@ -5,36 +5,32 @@
  */
 package servlets;
 
+import controllers.EmployeeController;
 import controllers.EmployeeRoleController;
-import controllers.LoginRegisterController;
-import icontrollers.ILoginRegisterController;
+import controllers.IEmployeeRoleController;
+import icontrollers.IEmployeeController;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import models.Account;
-import models.Employee;
-import models.EmployeeRole;
 import org.hibernate.SessionFactory;
 import tools.HibernateUtil;
 
 /**
  *
- * @author Lenovo
+ * @author hp
  */
-@WebServlet(name = "LoginServlet", urlPatterns = {"/loginservlet"})
-public class LoginServlet extends HttpServlet {
+@WebServlet(name = "CVServlet", urlPatterns = {"/cvservlet"})
+public class CVServlet extends HttpServlet {
 
-    private SessionFactory factory = HibernateUtil.getSessionFactory();
-    private ILoginRegisterController ilrc = new LoginRegisterController(factory);
-    private EmployeeRoleController erc = new EmployeeRoleController(factory);
     private String status;
+    private String cv_status;
+    private SessionFactory factory = HibernateUtil.getSessionFactory();
+    private IEmployeeController iec = new EmployeeController(factory);
+    private IEmployeeRoleController ierc = new EmployeeRoleController(factory);
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -49,6 +45,12 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            request.getSession().setAttribute("cv_status", "1");
+            request.getSession().setAttribute("employees", iec.getAll());
+            request.getSession().setAttribute("employeeId", iec.genId());
+            request.getSession().setAttribute("employeeroles", ierc.getAll());
+            
+            response.sendRedirect("curriculum-vitae.jsp");
         }
     }
 
@@ -64,14 +66,6 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String action = request.getParameter("action");
-        HttpSession session = request.getSession(true);
-        if (action.equalsIgnoreCase("logout")) {
-            session.getAttribute("sessionlogin");
-            session.invalidate();
-            request.getSession().setAttribute("status", "Anda Telah Logout");
-            response.sendRedirect("admin/login.jsp");
-        }
         processRequest(request, response);
     }
 
@@ -86,26 +80,6 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
-
-        status = ilrc.login(email, password);
-        List<String> sessionRole = new ArrayList<>();
-        for (EmployeeRole empl : erc.getById(email)) {
-            sessionRole.add(String.valueOf(empl.getRole().getId()));
-        }
-        if (status.equalsIgnoreCase("Login Berhasil") && sessionRole != null) {
-            request.getSession().setAttribute("sessionlogin", sessionRole);
-            request.getSession().setAttribute("status", status);
-            Account account = ilrc.getByEmail(email);
-            request.getSession().setAttribute("nik", account.getId());
-            request.getSession().setAttribute("sessionId", account.getId());
-            response.sendRedirect("employeeservlet");
-        } else {
-            request.getSession().setAttribute("status", status);
-            response.sendRedirect("admin/login.jsp");
-        }
-
         processRequest(request, response);
     }
 

@@ -13,7 +13,9 @@
     String employeeId = (String) session.getAttribute("employeeId");
     List<Employee> employees = (List<Employee>) session.getAttribute("employees");
     String status = (String) session.getAttribute("status");
-    out.print(status);
+    String sessionId = (String) session.getAttribute("nik");
+    
+    out.print(sessionId);
     if (logSession == null) {
         out.println("<script>alert('Anda belum login!')</script>");
         out.println("<script>window.location.href=\"admin/login.jsp\"</script>");
@@ -102,7 +104,6 @@
                                 <td scope="row"><%=empl.getBirthDate()%></td>
                                 <td scope="row"><%=empl.getGender()%></td>
                                 <td scope="row"><%=empl.getNationality()%></td>
-                                <td scope="row"><%=empl.getPhoto()%></td>
                             </tr>
                             <%
                                 }

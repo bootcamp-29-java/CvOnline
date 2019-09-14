@@ -1,0 +1,7 @@
+body.login{
+    overflow: hidden
+}
+
+body.hasNavbar{
+    padding-top: 75px;
+}

@@ -5,10 +5,12 @@
  */
 package servlets;
 
-import controllers.AccountController;
-import controllers.EmployeeController;
-import icontrollers.IAccountController;
-import icontrollers.IEmployeeController;
+import controllers.CategoryController;
+import controllers.EmployeeSkillCotroller;
+import controllers.SkillController;
+import icontrollers.ICategoryController;
+import icontrollers.IEmployeeSkillController;
+import icontrollers.ISkillController;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -16,22 +18,22 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.hibernate.Hibernate;
 import org.hibernate.SessionFactory;
-import tools.AllMethod;
 import tools.HibernateUtil;
 
 /**
  *
- * @author Lenovo
+ * @author hp
  */
-@WebServlet(name = "ResgisterServlet", urlPatterns = {"/registerservlet"})
-public class ResgisterServlet extends HttpServlet {
+@WebServlet(name = "TechnicalQualification", urlPatterns = {"/technicalqualification"})
+public class TechnicalQualification extends HttpServlet {
+
     private String status;
+    private String cv_status = "";
     private SessionFactory factory = HibernateUtil.getSessionFactory();
-    private IEmployeeController iec = new EmployeeController(factory);
-    private IAccountController iac = new AccountController(factory);
-    
+    private IEmployeeSkillController iesc = new EmployeeSkillCotroller(factory);
+    private ICategoryController icc = new CategoryController(factory);
+    private ISkillController isc = new SkillController(factory);
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -46,7 +48,11 @@ public class ResgisterServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            
+            request.getSession().setAttribute("cv_status", "4");
+            request.getSession().setAttribute("categorys", icc.getAll());
+            request.getSession().setAttribute("skills", isc.getAll());
+            request.getSession().setAttribute("employeeskills", iesc.getAll());
+            response.sendRedirect("curriculum-vitae.jsp");
         }
     }
 
@@ -76,26 +82,6 @@ public class ResgisterServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String id = request.getParameter("id");
-        String firstName = request.getParameter("firstName");
-        String lastName = request.getParameter("lastName");
-        String email = request.getParameter("email");
-        String birthPlace = request.getParameter("birthPlace");
-        String birthDate = request.getParameter("birthDate");
-        String gender = request.getParameter("gender");
-        String nationality = request.getParameter("nationality");
-        String token = AllMethod.generateToken();
-        status = iec.save(id, firstName, lastName, email, birthPlace, birthDate, gender, nationality, email, false);
-        if (status.equalsIgnoreCase("Save data berhasil")) {
-            if (iac.createAccount(id, "", token, "-1", "").equalsIgnoreCase("Berhasil")) {
-                AllMethod.sendEmail(email, firstName+" "+lastName, token);
-                request.getSession().setAttribute("status", status);
-                response.sendRedirect("index.jsp");
-            }else{
-                request.getSession().setAttribute("status", status);
-                response.sendRedirect("index.jsp");
-            }
-        }
         processRequest(request, response);
     }
 

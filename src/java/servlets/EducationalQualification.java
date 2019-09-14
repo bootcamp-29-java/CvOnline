@@ -5,36 +5,39 @@
  */
 package servlets;
 
-import controllers.EmployeeRoleController;
-import controllers.LoginRegisterController;
-import icontrollers.ILoginRegisterController;
+import controllers.DegreeController;
+import controllers.EducationHistoryController;
+import controllers.MajorController;
+import controllers.UniversityController;
+import icontrollers.IDegreeController;
+import icontrollers.IEducationHistoryController;
+import icontrollers.IMajorController;
+import icontrollers.IUniversityController;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import models.Account;
-import models.Employee;
-import models.EmployeeRole;
 import org.hibernate.SessionFactory;
 import tools.HibernateUtil;
 
 /**
  *
- * @author Lenovo
+ * @author hp
  */
-@WebServlet(name = "LoginServlet", urlPatterns = {"/loginservlet"})
-public class LoginServlet extends HttpServlet {
+@WebServlet(name = "EducationalQualification", urlPatterns = {"/educationalqualification"})
+public class EducationalQualification extends HttpServlet {
 
-    private SessionFactory factory = HibernateUtil.getSessionFactory();
-    private ILoginRegisterController ilrc = new LoginRegisterController(factory);
-    private EmployeeRoleController erc = new EmployeeRoleController(factory);
     private String status;
+    private String cv_status = "";
+    private SessionFactory factory = HibernateUtil.getSessionFactory();
+    private IEducationHistoryController iehc = new EducationHistoryController(factory);
+    private IUniversityController iuc = new UniversityController(factory);
+    private IDegreeController idc = new DegreeController(factory);
+    private IMajorController imc = new MajorController(factory);
+    
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -49,6 +52,11 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            request.getSession().setAttribute("cv_status", "3");
+            request.getSession().setAttribute("universitys", iuc.getAll());
+            request.getSession().setAttribute("degrees", idc.getAll());
+            request.getSession().setAttribute("majors", imc.getAll());
+            response.sendRedirect("curriculum-vitae.jsp");
         }
     }
 
@@ -64,14 +72,6 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String action = request.getParameter("action");
-        HttpSession session = request.getSession(true);
-        if (action.equalsIgnoreCase("logout")) {
-            session.getAttribute("sessionlogin");
-            session.invalidate();
-            request.getSession().setAttribute("status", "Anda Telah Logout");
-            response.sendRedirect("admin/login.jsp");
-        }
         processRequest(request, response);
     }
 
@@ -86,26 +86,17 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
-
-        status = ilrc.login(email, password);
-        List<String> sessionRole = new ArrayList<>();
-        for (EmployeeRole empl : erc.getById(email)) {
-            sessionRole.add(String.valueOf(empl.getRole().getId()));
-        }
-        if (status.equalsIgnoreCase("Login Berhasil") && sessionRole != null) {
-            request.getSession().setAttribute("sessionlogin", sessionRole);
-            request.getSession().setAttribute("status", status);
-            Account account = ilrc.getByEmail(email);
-            request.getSession().setAttribute("nik", account.getId());
-            request.getSession().setAttribute("sessionId", account.getId());
-            response.sendRedirect("employeeservlet");
-        } else {
-            request.getSession().setAttribute("status", status);
-            response.sendRedirect("admin/login.jsp");
-        }
-
+        
+        
+//        status = iec.savePersonalData(id, religion, marital, firstname, lastname, email, birthPlace, birthDate, gender, national, null, false);
+        
+//        if (status.equalsIgnoreCase("Save data berhasil")) {
+//            request.getSession().setAttribute("cv_status", "2");
+//            response.sendRedirect("curriculum-vitae.jsp");
+//        } else {
+//            request.getSession().setAttribute("status", "GAGAL");
+//        }
+        
         processRequest(request, response);
     }
 

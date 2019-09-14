@@ -6,11 +6,15 @@
 package servlets;
 
 import controllers.EmployeeController;
-import controllers.EmployeeRoleController;
-import controllers.IEmployeeRoleController;
+import controllers.MaritalController;
+import controllers.ReligionController;
 import icontrollers.IEmployeeController;
+import icontrollers.IMaritalController;
+import icontrollers.IReligionController;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -21,14 +25,16 @@ import tools.HibernateUtil;
 
 /**
  *
- * @author Lenovo
+ * @author hp
  */
-@WebServlet(name = "EmployeeServlet", urlPatterns = {"/employeeservlet"})
-public class EmployeeServlet extends HttpServlet {
+@WebServlet(name = "PersonalDataServlet", urlPatterns = {"/personaldataservlet"})
+public class PersonalDataServlet extends HttpServlet {
     private String status;
+    private String cv_status;
     private SessionFactory factory = HibernateUtil.getSessionFactory();
     private IEmployeeController iec = new EmployeeController(factory);
-    private IEmployeeRoleController ierc = new EmployeeRoleController(factory);
+    private IReligionController irc = new ReligionController(factory);
+    private IMaritalController imc = new MaritalController(factory);
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -44,11 +50,11 @@ public class EmployeeServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             request.getSession().setAttribute("employees", iec.getAll());
+            request.getSession().setAttribute("maritals", imc.getAll());
+            request.getSession().setAttribute("religions", irc.getAll());
             request.getSession().setAttribute("employeeId", iec.genId());
-            request.getSession().setAttribute("employeeroles", ierc.getAll());
-            String sessionId = (String) request.getSession().getAttribute("nik");
-            request.getSession().setAttribute("nik", sessionId);
-            response.sendRedirect("index.jsp");
+            request.getSession().setAttribute("cv_status", "1");
+            response.sendRedirect("curriculum-vitae.jsp");
         }
     }
 
@@ -78,6 +84,41 @@ public class EmployeeServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String id = request.getParameter("inputID");
+        String email = request.getParameter("inputEmail");
+        String firstname = request.getParameter("inputFirstName");
+        String lastname = request.getParameter("inputLastName");
+        String religion = request.getParameter("idReligion");
+        String marital = request.getParameter("idMaritalStatus");
+        String gMale = request.getParameter("genderMale");
+        String gFemale = request.getParameter("genderFemale");
+        String natWNI = request.getParameter("natWNI");
+        String natWNA = request.getParameter("natWNA");
+        String birthPlace = request.getParameter("inputBirthPlace");
+        String birthDate = request.getParameter("inputBirthDate");
+//        Date date1 = new SimpleDateFormat("yyyy-MM-dd").parse(birthDate);
+        String gender = "";
+        if (gMale!="") {
+            gender = gMale;
+        } else {
+            gender = gFemale;
+        }
+        
+        String national = "";
+        if (natWNI!="") {
+            national = natWNI;
+        } else {
+            national = natWNA;
+        }
+        
+        status = iec.savePersonalData(id, religion, marital, firstname, lastname, email, birthPlace, birthDate, gender, national, null, false);
+        
+        if (status.equalsIgnoreCase("Save data berhasil")) {
+            request.getSession().setAttribute("cv_status", "2");
+            response.sendRedirect("curriculum-vitae.jsp");
+        } else {
+            request.getSession().setAttribute("status", "GAGAL");
+        }
         processRequest(request, response);
     }
 

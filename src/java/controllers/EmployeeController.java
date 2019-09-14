@@ -14,6 +14,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import models.Employee;
+import models.Marital;
+import models.Religion;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
@@ -25,7 +27,8 @@ public class EmployeeController implements IEmployeeController {
     
     private IGeneralDAO<Employee> igdao;
     private SessionFactory factory;
-     private IEmployeeDAO empdao;
+    private IEmployeeDAO empdao;
+    
      
     public EmployeeController(SessionFactory factory) {
         igdao = new GeneralDAO<>(factory, Employee.class);
@@ -77,7 +80,23 @@ public class EmployeeController implements IEmployeeController {
     
     @Override
     public String genId() {
-        return String.valueOf(Integer.parseInt(empdao.genId())+1);
+        return String.valueOf(Integer.parseInt(empdao.genId())+3);
     }
 
+    @Override
+    public String savePersonalData(String id, String religion,String marital, String first_name, String last_name, String email, String birth_place, String birth_date, String gender, String nationality, String photo, boolean is_delete) {
+        String result = "";
+        try {
+            Date date1 = new SimpleDateFormat("yyyy-MM-dd").parse(birth_date);
+            Employee employee = new Employee(id, new Religion(Integer.parseInt(religion)), new Marital(Integer.parseInt(marital)), first_name, last_name, email, birth_place, date1, gender, nationality, photo, is_delete);
+            if (igdao.saveOrDelete(employee, true)) {
+                result = "Save data berhasil";
+            } else {
+                result = "Save data gagal";
+            }
+        } catch (Exception e) {
+            result = "Save data error";
+        }
+        return result;
+    }
 }

@@ -162,6 +162,11 @@ public class Testing {
         
         IGeneralDAO<Organization> emDAO2 = new GeneralDAO(factory, Organization.class);
 //        System.out.println(emDAO2.getById(Integer.parseInt("3")).getPosittion());
+
+        EmployeeController ec1 = new EmployeeController(factory);
+//        System.out.println(ec1.savePersonalData("12", "1", "1", "asd", "asd", "asd@gmail.com", "salatiga", "2019-09-09", "Male", "WNI", null, true));
+
+        
         
 
     }

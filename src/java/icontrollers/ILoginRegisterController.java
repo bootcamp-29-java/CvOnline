@@ -5,6 +5,8 @@
  */
 package icontrollers;
 
+import models.Account;
+
 /**
  *
  * @author Lenovo
@@ -13,4 +15,5 @@ public interface ILoginRegisterController {
 
     String login(String email, String password);
     String updateByToken(String token, String newPassword);
+    Account getByEmail(String email);
 }
