@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author hp
+ * @author Wehijin
  */
 @Entity
 @Table(name = "tb_tr_organization")
@@ -77,7 +77,7 @@ public class Organization implements Serializable {
         this.startPeriod = startPeriod;
         this.endPeriod = endPeriod;
     }
-
+    
     public Organization(String name, String posittion, Date startPeriod, Date endPeriod, Employee employee) {
         this.name = name;
         this.posittion = posittion;

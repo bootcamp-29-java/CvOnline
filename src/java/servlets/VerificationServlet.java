@@ -5,21 +5,15 @@
  */
 package servlets;
 
-import controllers.EmployeeRoleController;
 import controllers.LoginRegisterController;
 import icontrollers.ILoginRegisterController;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import models.Account;
-import models.EmployeeRole;
 import org.hibernate.SessionFactory;
 import tools.HibernateUtil;
 
@@ -27,13 +21,12 @@ import tools.HibernateUtil;
  *
  * @author Wehijin
  */
-@WebServlet(name = "LoginServlet", urlPatterns = {"/loginservlet"})
-public class LoginServlet extends HttpServlet {
+@WebServlet(name = "VerificationServlet", urlPatterns = {"/verificationservlet"})
+public class VerificationServlet extends HttpServlet {
     
+    private String status;
     private SessionFactory factory = HibernateUtil.getSessionFactory();
     private ILoginRegisterController ilrc = new LoginRegisterController(factory);
-    private EmployeeRoleController erc = new EmployeeRoleController(factory);
-    private String status;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -52,10 +45,10 @@ public class LoginServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet LoginServlet</title>");            
+            out.println("<title>Verification in progress...</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet LoginServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Please Wait...</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -73,14 +66,9 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String action = request.getParameter("action");
-        HttpSession session = request.getSession(true);
-        if (action.equalsIgnoreCase("logout")) {
-            session.getAttribute("sessionlogin");
-            session.invalidate();
-            request.getSession().setAttribute("status", "Anda Telah Logout");
-            response.sendRedirect("login.jsp");
-        }
+        String token = request.getParameter("v");
+        request.getSession().setAttribute("token", token);
+        response.sendRedirect("update-password.jsp?v=" + token);
         processRequest(request, response);
     }
 
@@ -95,24 +83,18 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
+        String newPassword = request.getParameter("newPassword");
+        String confirmPass = request.getParameter("confirmPass");
+        String token = request.getParameter("token");
 
-        status = ilrc.login(email, password);
-        List<String> sessionRole = new ArrayList<>();
-        for (EmployeeRole empl : erc.getById(email)) {
-            sessionRole.add(String.valueOf(empl.getRole().getId()));
-        }
-        if (status.equalsIgnoreCase("Login Berhasil") && sessionRole != null) {
-            request.getSession().setAttribute("sessionlogin", sessionRole);
+        status = ilrc.updateByToken(token, newPassword);
+        if (status.equals("Password Sudah Dirubah")) {
             request.getSession().setAttribute("status", status);
-            Account account = ilrc.getByEmail(email);
-            request.getSession().setAttribute("nik", account.getId());
-            request.getSession().setAttribute("sessionId", account.getId());
-            response.sendRedirect("employeeservlet");
+            response.sendRedirect("login.jsp");
         } else {
             request.getSession().setAttribute("status", status);
             response.sendRedirect("login.jsp");
+            processRequest(request, response);
         }
         processRequest(request, response);
     }

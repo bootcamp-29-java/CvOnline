@@ -25,7 +25,9 @@
                 cancelButtonText: 'No'
             }).then((result) => {
                 if (result.value) {
-                    window.location.href = "login.jsp";
+                    window.location.href = "loginservlet?action=logout";
+                } else {
+                    swal.fire("Batal Logout!");
                 }
             })
         }

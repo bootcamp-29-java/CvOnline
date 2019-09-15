@@ -39,12 +39,12 @@ public class WorkAssignmentController implements IWorkAssignmentController {
     }
 
     @Override
-    public String saveOrDelete(String company, String jobDescription,String startDate,String endDate,String employee) {
+    public String save(String company, String position, String jobDescription,String startDate,String endDate,String employee) {
         String result = "";
         try {
             Date sdate = new SimpleDateFormat("yyyy-MM-dd").parse(startDate);
             Date edate = new SimpleDateFormat("yyyy-MM-dd").parse(endDate);
-            WorkAssignment wa = new WorkAssignment(company, jobDescription, sdate, edate, new Employee(employee));
+            WorkAssignment wa = new WorkAssignment(company, position, jobDescription, sdate, edate, new Employee(employee));
             
             if (igdao.saveOrDelete(wa, true)) {
                 result = "Save data berhasil";

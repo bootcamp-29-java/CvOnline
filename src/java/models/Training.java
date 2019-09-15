@@ -80,6 +80,10 @@ public class Training implements Serializable {
         this.employee = employee;
     }
 
+    public Training(String name, String position, Date sdate, Date edate, Employee employee) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     public Integer getId() {
         return id;
     }

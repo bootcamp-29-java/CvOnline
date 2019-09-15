@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author hp
+ * @author Wehijin
  */
 @Entity
 @Table(name = "tb_tr_project")
@@ -78,7 +78,7 @@ public class Project implements Serializable {
         this.endDate = endDate;
         this.description = description;
     }
-
+    
     public Project(String name, Date startDate, Date endDate, String description, Employee employee) {
         this.name = name;
         this.startDate = startDate;

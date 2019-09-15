@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author hp
+ * @author Wehijin
  */
 @Entity
 @Table(name = "tb_tr_certification")
@@ -34,6 +34,10 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Certification.findByCode", query = "SELECT c FROM Certification c WHERE c.code = :code")})
 public class Certification implements Serializable {
 
+    @Lob
+    @Column(name = "attachment")
+    private byte[] attachment;
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,15 +47,12 @@ public class Certification implements Serializable {
     @Basic(optional = false)
     @Column(name = "code")
     private String code;
-    @Lob
-    @Column(name = "attachment")
-    private byte[] attachment;
-    @JoinColumn(name = "certificate", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private Certificate certificate;
     @JoinColumn(name = "employee", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Employee employee;
+    @JoinColumn(name = "certificate", referencedColumnName = "id")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private Certificate certificate;
 
     public Certification() {
     }
@@ -64,7 +65,7 @@ public class Certification implements Serializable {
         this.id = id;
         this.code = code;
     }
-
+    
     public Certification(String code, byte[] attachment, Certificate certificate, Employee employee) {
         this.code = code;
         this.attachment = attachment;
@@ -88,12 +89,13 @@ public class Certification implements Serializable {
         this.code = code;
     }
 
-    public byte[] getAttachment() {
-        return attachment;
+
+    public Employee getEmployee() {
+        return employee;
     }
 
-    public void setAttachment(byte[] attachment) {
-        this.attachment = attachment;
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 
     public Certificate getCertificate() {
@@ -102,14 +104,6 @@ public class Certification implements Serializable {
 
     public void setCertificate(Certificate certificate) {
         this.certificate = certificate;
-    }
-
-    public Employee getEmployee() {
-        return employee;
-    }
-
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
     }
 
     @Override
@@ -135,6 +129,14 @@ public class Certification implements Serializable {
     @Override
     public String toString() {
         return "models.Certification[ id=" + id + " ]";
+    }
+
+    public byte[] getAttachment() {
+        return attachment;
+    }
+
+    public void setAttachment(byte[] attachment) {
+        this.attachment = attachment;
     }
     
 }

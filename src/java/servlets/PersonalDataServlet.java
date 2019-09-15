@@ -13,8 +13,6 @@ import icontrollers.IMaritalController;
 import icontrollers.IReligionController;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -25,16 +23,16 @@ import tools.HibernateUtil;
 
 /**
  *
- * @author hp
+ * @author Wehijin
  */
 @WebServlet(name = "PersonalDataServlet", urlPatterns = {"/personaldataservlet"})
 public class PersonalDataServlet extends HttpServlet {
+
     private String status;
-    private String cv_status;
     private SessionFactory factory = HibernateUtil.getSessionFactory();
     private IEmployeeController iec = new EmployeeController(factory);
-    private IReligionController irc = new ReligionController(factory);
-    private IMaritalController imc = new MaritalController(factory);
+//    private IReligionController irc = new ReligionController(factory);
+//    private IMaritalController imc = new MaritalController(factory);
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -49,12 +47,12 @@ public class PersonalDataServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            request.getSession().setAttribute("employees", iec.getAll());
-            request.getSession().setAttribute("maritals", imc.getAll());
-            request.getSession().setAttribute("religions", irc.getAll());
-            request.getSession().setAttribute("employeeId", iec.genId());
-            request.getSession().setAttribute("cv_status", "1");
-            response.sendRedirect("curriculum-vitae.jsp");
+            /* TODO output your page here. You may use following sample code. */
+//            request.getSession().setAttribute("employees", iec.getAll());
+//            request.getSession().setAttribute("maritals", imc.getAll());
+//            request.getSession().setAttribute("religions", irc.getAll());
+//            request.getSession().setAttribute("employeeId", iec.genId());
+//            response.sendRedirect("cv-online.jsp");
         }
     }
 
@@ -88,36 +86,24 @@ public class PersonalDataServlet extends HttpServlet {
         String email = request.getParameter("inputEmail");
         String firstname = request.getParameter("inputFirstName");
         String lastname = request.getParameter("inputLastName");
-        String religion = request.getParameter("idReligion");
-        String marital = request.getParameter("idMaritalStatus");
-        String gMale = request.getParameter("genderMale");
-        String gFemale = request.getParameter("genderFemale");
-        String natWNI = request.getParameter("natWNI");
-        String natWNA = request.getParameter("natWNA");
         String birthPlace = request.getParameter("inputBirthPlace");
         String birthDate = request.getParameter("inputBirthDate");
+        String religion = request.getParameter("religion");
+        String marital = request.getParameter("marital");
+        String gender = request.getParameter("gender");
+        String nationality = request.getParameter("nationality");
 //        Date date1 = new SimpleDateFormat("yyyy-MM-dd").parse(birthDate);
-        String gender = "";
-        if (gMale!="") {
-            gender = gMale;
-        } else {
-            gender = gFemale;
-        }
-        
-        String national = "";
-        if (natWNI!="") {
-            national = natWNI;
-        } else {
-            national = natWNA;
-        }
-        
-        status = iec.savePersonalData(id, religion, marital, firstname, lastname, email, birthPlace, birthDate, gender, national, null, false);
-        
+
+        String selected_gender = (gender.equals("M") ? "Male" : "Female");
+        String selected_nationality = (nationality.equals("wni") ? "WNI" : "WNA");
+
+        status = iec.savePersonalData(id, religion, marital, firstname, lastname, email, birthPlace, birthDate, selected_gender, selected_nationality, null, false);
+
         if (status.equalsIgnoreCase("Save data berhasil")) {
-            request.getSession().setAttribute("cv_status", "2");
-            response.sendRedirect("curriculum-vitae.jsp");
+            request.getSession().setAttribute("status1", status);
+            response.sendRedirect("cv-online.jsp");
         } else {
-            request.getSession().setAttribute("status", "GAGAL");
+            request.getSession().setAttribute("status1", "GAGAL");
         }
         processRequest(request, response);
     }

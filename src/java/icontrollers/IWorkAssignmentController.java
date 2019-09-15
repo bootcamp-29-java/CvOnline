@@ -18,6 +18,6 @@ public interface IWorkAssignmentController {
 
     WorkAssignment getById(String id);
 
-    String saveOrDelete(String company, String jobDescription, String startDate, String endDate, String employee);
+    String save(String company, String position, String jobDescription, String startDate, String endDate, String employee);
     
 }

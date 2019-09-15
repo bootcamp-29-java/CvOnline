@@ -12,15 +12,15 @@
         response.setHeader("Cache-Control", "no-store");
         response.setHeader("Pragma", "no-cache");
         response.setDateHeader("Expires", 0);
-        String cv_status = (String) session.getAttribute("cv_status");
-//        String cv_status = "8";
-        if (cv_status == null) {
-            response.sendRedirect("cvservlet");
-        } else {
+//        String cv_status = (String) session.getAttribute("cv_status");
+        String cv_status = "1";
+//        if (cv_status == null) {
+//            response.sendRedirect("cvservlet");
+//        } else {
     %>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>CV Employee</title>
+        <title>Home</title>
         <%@include file='addons/framework.jsp' %>
     </head>
     <body class="hasNavbar">
@@ -64,6 +64,6 @@
     </body>
 
     <%
-        }
+//        }
     %>
 </html>

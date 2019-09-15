@@ -52,12 +52,12 @@ public class EmployeeController implements IEmployeeController {
             Date date1 = new SimpleDateFormat("yyyy-MM-dd").parse(birth_date);
             Employee employee = new Employee(id, first_name, last_name, email, birth_place, date1, gender, nationality, photo, is_delete);
             if (igdao.saveOrDelete(employee, true)) {
-                result = "Save data berhasil";
+                result = "Save Data Berhasil";
             } else {
-                result = "Save data gagal";
+                result = "Save Data Gagal";
             }
         } catch (Exception e) {
-            result = "Save data error";
+            result = "Save Data Error";
         }
         return result;
     }
@@ -80,15 +80,17 @@ public class EmployeeController implements IEmployeeController {
     
     @Override
     public String genId() {
-        return String.valueOf(Integer.parseInt(empdao.genId())+3);
+        return String.valueOf(Integer.parseInt(empdao.genId())+1);
     }
 
     @Override
     public String savePersonalData(String id, String religion,String marital, String first_name, String last_name, String email, String birth_place, String birth_date, String gender, String nationality, String photo, boolean is_delete) {
         String result = "";
         try {
-            Date date1 = new SimpleDateFormat("yyyy-MM-dd").parse(birth_date);
-            Employee employee = new Employee(id, new Religion(Integer.parseInt(religion)), new Marital(Integer.parseInt(marital)), first_name, last_name, email, birth_place, date1, gender, nationality, photo, is_delete);
+            Date birth_date2 = new SimpleDateFormat("yyyy-MM-dd").parse(birth_date);
+            Employee employee = new Employee(id, new Religion(Integer.parseInt(religion)),
+                    new Marital(Integer.parseInt(marital)), first_name, last_name, email, birth_place, birth_date2, gender, nationality, photo, is_delete);
+            
             if (igdao.saveOrDelete(employee, true)) {
                 result = "Save data berhasil";
             } else {

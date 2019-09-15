@@ -29,7 +29,6 @@ public class EmployeeDAO implements IEmployeeDAO {
         this.factory = factory;
     }
     
-    
     @Override
     public String genId(){
         String emp="";

@@ -37,10 +37,10 @@ public class EmployeeLanguageController implements IEmployeeLanguageController {
     }
 
     @Override
-    public String save(String language, String employee) {
+    public String save(String employee, String language) {
         String result = "";
         try {
-            EmployeeLanguage el = new EmployeeLanguage(new Language(language), new Employee(employee));
+            EmployeeLanguage el = new EmployeeLanguage(new Employee(employee), new Language(language));
             
             if (igdao.saveOrDelete(el, true)) {
                 result = "Save data berhasil";

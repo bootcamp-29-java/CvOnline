@@ -9,7 +9,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Update Password</title>
 
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <style>
@@ -46,7 +46,6 @@
         <!-- Just an image -->
         <nav class="navbar navbar-light bg-light">
             <a class="navbar-brand" href="#">
-
                 <img src="https://getbootstrap.com/" width="30" height="30" alt="">
             </a>
         </nav>
@@ -55,7 +54,7 @@
             <div class="absolute-center is-responsive">
                 <div class="row">
                     <div class="col-md">
-                        <form action="verifikasiservlet" method="POST" id="loginForm" autocomplete="off">
+                        <form action="verificationservlet" method="POST" id="loginForm" autocomplete="off">
                             <div class="form-group">
                                 <h3 class="text-center">Reset Password</h3>
                             </div>

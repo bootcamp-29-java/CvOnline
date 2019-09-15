@@ -8,7 +8,6 @@ package models;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -24,7 +23,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author hp
+ * @author Wehijin
  */
 @Entity
 @Table(name = "tb_m_religion")
@@ -44,7 +43,7 @@ public class Religion implements Serializable {
     @Basic(optional = false)
     @Column(name = "name")
     private String name;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "religion", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "religion", fetch = FetchType.LAZY)
     private List<Employee> employeeList;
 
     public Religion() {

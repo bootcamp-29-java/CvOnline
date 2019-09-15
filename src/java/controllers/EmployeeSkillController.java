@@ -18,10 +18,10 @@ import org.hibernate.SessionFactory;
  *
  * @author hp
  */
-public class EmployeeSkillCotroller implements IEmployeeSkillController {
+public class EmployeeSkillController implements IEmployeeSkillController {
     private IGeneralDAO<EmployeeSkill> igdao;
 
-    public EmployeeSkillCotroller(SessionFactory factory) {
+    public EmployeeSkillController(SessionFactory factory) {
         igdao = new GeneralDAO<EmployeeSkill>(factory, EmployeeSkill.class);
     }
     

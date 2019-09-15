@@ -5,14 +5,8 @@
  */
 package servlets;
 
-import controllers.DegreeController;
-import controllers.EducationHistoryController;
-import controllers.MajorController;
-import controllers.UniversityController;
-import icontrollers.IDegreeController;
-import icontrollers.IEducationHistoryController;
-import icontrollers.IMajorController;
-import icontrollers.IUniversityController;
+import controllers.EmployeeSkillController;
+import icontrollers.IEmployeeSkillController;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -27,17 +21,12 @@ import tools.HibernateUtil;
  *
  * @author hp
  */
-@WebServlet(name = "EducationalQualification", urlPatterns = {"/educationalqualification"})
-public class EducationalQualification extends HttpServlet {
+@WebServlet(name = "SkillServlet", urlPatterns = {"/skillservlet"})
+public class SkillServlet extends HttpServlet {
 
     private String status;
-    private String cv_status = "";
     private SessionFactory factory = HibernateUtil.getSessionFactory();
-    private IEducationHistoryController iehc = new EducationHistoryController(factory);
-    private IUniversityController iuc = new UniversityController(factory);
-    private IDegreeController idc = new DegreeController(factory);
-    private IMajorController imc = new MajorController(factory);
-    
+    private IEmployeeSkillController iesc = new EmployeeSkillController(factory);
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -52,11 +41,7 @@ public class EducationalQualification extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            request.getSession().setAttribute("cv_status", "3");
-            request.getSession().setAttribute("universitys", iuc.getAll());
-            request.getSession().setAttribute("degrees", idc.getAll());
-            request.getSession().setAttribute("majors", imc.getAll());
-            response.sendRedirect("curriculum-vitae.jsp");
+
         }
     }
 
@@ -86,16 +71,19 @@ public class EducationalQualification extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String id = request.getParameter("inputID");
+        String category = request.getParameter("categoryID");
+        String skill = request.getParameter("skillsID");
+        String score = request.getParameter("score");
         
-        
-//        status = iec.savePersonalData(id, religion, marital, firstname, lastname, email, birthPlace, birthDate, gender, national, null, false);
-        
-//        if (status.equalsIgnoreCase("Save data berhasil")) {
-//            request.getSession().setAttribute("cv_status", "2");
-//            response.sendRedirect("curriculum-vitae.jsp");
-//        } else {
-//            request.getSession().setAttribute("status", "GAGAL");
-//        }
+        status = iesc.save(Integer.parseInt(score), skill, id);
+
+        if (status.equalsIgnoreCase("Save data berhasil")) {
+            request.getSession().setAttribute("status1", status);
+            response.sendRedirect("cv-online.jsp");
+        } else {
+            request.getSession().setAttribute("status1", "GAGAL");
+        }
         
         processRequest(request, response);
     }

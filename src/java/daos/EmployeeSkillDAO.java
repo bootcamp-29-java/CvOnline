@@ -5,6 +5,7 @@
  */
 package daos;
 
+import idaos.IEmployeeSkillDAO;
 import java.util.ArrayList;
 import java.util.List;
 import models.EmployeeLanguage;

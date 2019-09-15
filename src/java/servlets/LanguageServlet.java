@@ -5,8 +5,8 @@
  */
 package servlets;
 
-import controllers.LanguageController;
-import icontrollers.ILanguageController;
+import controllers.EmployeeLanguageController;
+import icontrollers.IEmployeeLanguageController;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -25,10 +25,9 @@ import tools.HibernateUtil;
 public class LanguageServlet extends HttpServlet {
 
     private String status;
-    private String cv_status = "";
     private SessionFactory factory = HibernateUtil.getSessionFactory();
-    private ILanguageController ilc = new LanguageController(factory);
-
+    private IEmployeeLanguageController ielc = new EmployeeLanguageController(factory);
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -42,8 +41,7 @@ public class LanguageServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            request.getSession().setAttribute("languages", ilc.getAll());
-            response.sendRedirect("curriculum-vitae.jsp");
+            
         }
     }
 
@@ -73,6 +71,18 @@ public class LanguageServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String id = request.getParameter("inputID");
+        String languageID = request.getParameter("languageId");
+        
+        status = ielc.save(id, languageID);
+
+        if (status.equalsIgnoreCase("Save data berhasil")) {
+            request.getSession().setAttribute("status1", status);
+            response.sendRedirect("cv-online.jsp");
+        } else {
+            request.getSession().setAttribute("status1", "GAGAL");
+        }
+        
         processRequest(request, response);
     }
 

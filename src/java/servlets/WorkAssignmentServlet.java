@@ -5,12 +5,8 @@
  */
 package servlets;
 
-import controllers.CategoryController;
-import controllers.EmployeeSkillCotroller;
-import controllers.SkillController;
-import icontrollers.ICategoryController;
-import icontrollers.IEmployeeSkillController;
-import icontrollers.ISkillController;
+import controllers.WorkAssignmentController;
+import icontrollers.IWorkAssignmentController;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -25,15 +21,12 @@ import tools.HibernateUtil;
  *
  * @author hp
  */
-@WebServlet(name = "TechnicalQualification", urlPatterns = {"/technicalqualification"})
-public class TechnicalQualification extends HttpServlet {
+@WebServlet(name = "WorkAssignmentServlet", urlPatterns = {"/workassignmentservlet"})
+public class WorkAssignmentServlet extends HttpServlet {
 
     private String status;
-    private String cv_status = "";
     private SessionFactory factory = HibernateUtil.getSessionFactory();
-    private IEmployeeSkillController iesc = new EmployeeSkillCotroller(factory);
-    private ICategoryController icc = new CategoryController(factory);
-    private ISkillController isc = new SkillController(factory);
+    private IWorkAssignmentController iwac = new WorkAssignmentController(factory);
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -48,11 +41,7 @@ public class TechnicalQualification extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            request.getSession().setAttribute("cv_status", "4");
-            request.getSession().setAttribute("categorys", icc.getAll());
-            request.getSession().setAttribute("skills", isc.getAll());
-            request.getSession().setAttribute("employeeskills", iesc.getAll());
-            response.sendRedirect("curriculum-vitae.jsp");
+
         }
     }
 
@@ -82,6 +71,22 @@ public class TechnicalQualification extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String id = request.getParameter("inputID");
+        String companyName = request.getParameter("companyName");
+        String position = request.getParameter("position");
+        String description = request.getParameter("description");
+        String startDate = request.getParameter("startDate");
+        String endDate = request.getParameter("endDate");
+
+        status = iwac.save(companyName, position, description, startDate, endDate, id);
+
+        if (status.equalsIgnoreCase("Save data berhasil")) {
+            request.getSession().setAttribute("status1", status);
+            response.sendRedirect("cv-online.jsp");
+        } else {
+            request.getSession().setAttribute("status1", "GAGAL");
+        }
+
         processRequest(request, response);
     }
 

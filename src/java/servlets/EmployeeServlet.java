@@ -7,8 +7,8 @@ package servlets;
 
 import controllers.EmployeeController;
 import controllers.EmployeeRoleController;
-import controllers.IEmployeeRoleController;
 import icontrollers.IEmployeeController;
+import icontrollers.IEmployeeRoleController;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -21,7 +21,7 @@ import tools.HibernateUtil;
 
 /**
  *
- * @author Lenovo
+ * @author Wehijin
  */
 @WebServlet(name = "EmployeeServlet", urlPatterns = {"/employeeservlet"})
 public class EmployeeServlet extends HttpServlet {
@@ -43,12 +43,13 @@ public class EmployeeServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
             request.getSession().setAttribute("employees", iec.getAll());
-            request.getSession().setAttribute("employeeId", iec.genId());
-            request.getSession().setAttribute("employeeroles", ierc.getAll());
             String sessionId = (String) request.getSession().getAttribute("nik");
+            request.getSession().setAttribute("employeeNextId", iec.genId());
+            request.getSession().setAttribute("employeeroles", ierc.getAll());
             request.getSession().setAttribute("nik", sessionId);
-            response.sendRedirect("index.jsp");
+            response.sendRedirect("cvservlet");
         }
     }
 

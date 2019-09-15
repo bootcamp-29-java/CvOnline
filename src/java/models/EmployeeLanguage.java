@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author hp
+ * @author Wehijin
  */
 @Entity
 @Table(name = "tb_tr_employee_language")
@@ -38,12 +38,12 @@ public class EmployeeLanguage implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @JoinColumn(name = "language", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private Language language;
     @JoinColumn(name = "employee", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Employee employee;
+    @JoinColumn(name = "language", referencedColumnName = "id")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private Language language;
 
     public EmployeeLanguage() {
     }
@@ -52,9 +52,9 @@ public class EmployeeLanguage implements Serializable {
         this.id = id;
     }
 
-    public EmployeeLanguage(Language language, Employee employee) {
-        this.language = language;
+    public EmployeeLanguage(Employee employee, Language language) {
         this.employee = employee;
+        this.language = language;
     }
 
     public Integer getId() {
@@ -65,20 +65,20 @@ public class EmployeeLanguage implements Serializable {
         this.id = id;
     }
 
-    public Language getLanguage() {
-        return language;
-    }
-
-    public void setLanguage(Language language) {
-        this.language = language;
-    }
-
     public Employee getEmployee() {
         return employee;
     }
 
     public void setEmployee(Employee employee) {
         this.employee = employee;
+    }
+
+    public Language getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(Language language) {
+        this.language = language;
     }
 
     @Override

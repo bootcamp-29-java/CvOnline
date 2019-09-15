@@ -5,10 +5,10 @@
  */
 package servlets;
 
+import controllers.ProjectController;
 import controllers.TrainingController;
-import controllers.WorkAssignmentController;
+import icontrollers.IProjectController;
 import icontrollers.ITrainingController;
-import icontrollers.IWorkAssignmentController;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -27,7 +27,6 @@ import tools.HibernateUtil;
 public class TrainingServlet extends HttpServlet {
 
     private String status;
-    private String cv_status = "";
     private SessionFactory factory = HibernateUtil.getSessionFactory();
     private ITrainingController itc = new TrainingController(factory);
 
@@ -44,9 +43,7 @@ public class TrainingServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            request.getSession().setAttribute("cv_status", "8");
-            request.getSession().setAttribute("trainings", itc.getAll());
-            response.sendRedirect("curriculum-vitae.jsp");
+            
         }
     }
 
@@ -76,12 +73,19 @@ public class TrainingServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String name = request.getParameter("name");
-        String sdate = request.getParameter("inputProjectStartDate");
-        String edate = request.getParameter("inputProjectEndDate");
-        
-        status = itc.save(name, sdate, edate, "1");
-        
+        String id = request.getParameter("inputID");
+        String trainingName = request.getParameter("trainingName");
+        String startDate = request.getParameter("startDate");
+        String endDate = request.getParameter("endDate");
+
+        status = itc.save(trainingName, startDate, endDate, id);
+
+        if (status.equalsIgnoreCase("Save data berhasil")) {
+            request.getSession().setAttribute("status1", status);
+            response.sendRedirect("cv-online.jsp");
+        } else {
+            request.getSession().setAttribute("status1", "GAGAL");
+        }
         processRequest(request, response);
     }
 

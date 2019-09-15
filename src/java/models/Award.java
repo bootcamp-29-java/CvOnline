@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author hp
+ * @author Wehijin
  */
 @Entity
 @Table(name = "tb_tr_award")
@@ -62,7 +62,7 @@ public class Award implements Serializable {
         this.name = name;
         this.date = date;
     }
-
+    
     public Award(String name, String date, Employee employee) {
         this.name = name;
         this.date = date;

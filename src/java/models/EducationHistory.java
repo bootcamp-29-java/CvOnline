@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author hp
+ * @author Wehijin
  */
 @Entity
 @Table(name = "tb_tr_education_history")
@@ -34,6 +34,10 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "EducationHistory.findByGpa", query = "SELECT e FROM EducationHistory e WHERE e.gpa = :gpa")})
 public class EducationHistory implements Serializable {
 
+    @Lob
+    @Column(name = "attachment")
+    private byte[] attachment;
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,9 +47,6 @@ public class EducationHistory implements Serializable {
     @Basic(optional = false)
     @Column(name = "gpa")
     private String gpa;
-    @Lob
-    @Column(name = "attachment")
-    private byte[] attachment;
     @JoinColumn(name = "education", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Education education;
@@ -64,7 +65,7 @@ public class EducationHistory implements Serializable {
         this.id = id;
         this.gpa = gpa;
     }
-
+    
     public EducationHistory(String gpa, byte[] attachment, Education education, Employee employee) {
         this.gpa = gpa;
         this.attachment = attachment;
@@ -88,12 +89,13 @@ public class EducationHistory implements Serializable {
         this.gpa = gpa;
     }
 
-    public byte[] getAttachment() {
-        return attachment;
+
+    public Employee getEmployee() {
+        return employee;
     }
 
-    public void setAttachment(byte[] attachment) {
-        this.attachment = attachment;
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 
     public Education getEducation() {
@@ -102,14 +104,6 @@ public class EducationHistory implements Serializable {
 
     public void setEducation(Education education) {
         this.education = education;
-    }
-
-    public Employee getEmployee() {
-        return employee;
-    }
-
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
     }
 
     @Override
@@ -135,6 +129,14 @@ public class EducationHistory implements Serializable {
     @Override
     public String toString() {
         return "models.EducationHistory[ id=" + id + " ]";
+    }
+
+    public byte[] getAttachment() {
+        return attachment;
+    }
+
+    public void setAttachment(byte[] attachment) {
+        this.attachment = attachment;
     }
     
 }

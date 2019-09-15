@@ -10,24 +10,25 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
     List<EmployeeRole> logSession = (List<EmployeeRole>) session.getAttribute("sessionlogin");
-    String employeeId = (String) session.getAttribute("employeeId");
+    String employeeNextId = (String) session.getAttribute("employeeNextId");
     List<Employee> employees = (List<Employee>) session.getAttribute("employees");
     String status = (String) session.getAttribute("status");
     String sessionId = (String) session.getAttribute("nik");
     
+//    out.print(employeeNextId);
     out.print(sessionId);
-    if (logSession == null) {
-        out.println("<script>alert('Anda belum login!')</script>");
-        out.println("<script>window.location.href=\"admin/login.jsp\"</script>");
-    } else if(employees==null){
-         response.sendRedirect("employeeservlet");
-    }else{
+//    if (logSession == null) {
+//        out.println("<script>alert('Anda belum login!')</script>");
+//        out.println("<script>window.location.href=\"admin/login.jsp\"</script>");
+//    } else if(employees==null){
+//         response.sendRedirect("employeeservlet");
+//    }else{
 %>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Super Admin Control</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
@@ -35,7 +36,7 @@
     </head>
     <body>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-            <a class="navbar-brand" href="#">Navbar</a>
+            <a class="navbar-brand" href="#">Super Admin Control</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -92,23 +93,7 @@
                                 <th scope="col">Nationality</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <%
-                                for (Employee empl : employees) {
-                            %>
-                            <tr>
-                                <td scope="row"><%=empl.getFirstName()%></td>
-                                <td scope="row"><%=empl.getLastName()%></td>
-                                <td scope="row"><%=empl.getEmail()%></td>
-                                <td scope="row"><%=empl.getBirthPlace()%></td>
-                                <td scope="row"><%=empl.getBirthDate()%></td>
-                                <td scope="row"><%=empl.getGender()%></td>
-                                <td scope="row"><%=empl.getNationality()%></td>
-                            </tr>
-                            <%
-                                }
-                            %>
-                        </tbody>
+                        <!--HERE-->
                     </table>
                     <!--DATA TABLE HERE-->
                 </div>
@@ -129,11 +114,11 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action="registerservlet" method="POST">
+                        <form action="registeraccountservlet" method="POST">
                             <div class="form-row">
                                 <div class="form-group col-md-12">
                                     <label for="inputEmail4">ID</label>
-                                    <input type="number" class="form-control" id="id" name="id" placeholder="First Name" value="<%=employeeId%>">
+                                    <input type="number" class="form-control" id="id" name="id" placeholder="First Name" value="<%=employeeNextId%>">
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="inputEmail4">First Name</label>
@@ -217,7 +202,7 @@
 </html>
 
 <%
-    }
+//    }
     
     session.removeAttribute("status");
     session.removeAttribute("employees");

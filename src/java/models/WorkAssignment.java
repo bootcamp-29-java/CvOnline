@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author hp
+ * @author Wehijin
  */
 @Entity
 @Table(name = "tb_tr_work_assignment")
@@ -35,6 +35,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "WorkAssignment.findAll", query = "SELECT w FROM WorkAssignment w")
     , @NamedQuery(name = "WorkAssignment.findById", query = "SELECT w FROM WorkAssignment w WHERE w.id = :id")
     , @NamedQuery(name = "WorkAssignment.findByCompany", query = "SELECT w FROM WorkAssignment w WHERE w.company = :company")
+    , @NamedQuery(name = "WorkAssignment.findByPosition", query = "SELECT w FROM WorkAssignment w WHERE w.position = :position")
     , @NamedQuery(name = "WorkAssignment.findByStartDate", query = "SELECT w FROM WorkAssignment w WHERE w.startDate = :startDate")
     , @NamedQuery(name = "WorkAssignment.findByEndDate", query = "SELECT w FROM WorkAssignment w WHERE w.endDate = :endDate")})
 public class WorkAssignment implements Serializable {
@@ -48,6 +49,9 @@ public class WorkAssignment implements Serializable {
     @Basic(optional = false)
     @Column(name = "company")
     private String company;
+    @Basic(optional = false)
+    @Column(name = "position")
+    private String position;
     @Basic(optional = false)
     @Lob
     @Column(name = "job_description")
@@ -71,16 +75,18 @@ public class WorkAssignment implements Serializable {
         this.id = id;
     }
 
-    public WorkAssignment(Integer id, String company, String jobDescription, Date startDate, Date endDate) {
+    public WorkAssignment(Integer id, String company, String position, String jobDescription, Date startDate, Date endDate) {
         this.id = id;
         this.company = company;
+        this.position = position;
         this.jobDescription = jobDescription;
         this.startDate = startDate;
         this.endDate = endDate;
     }
-
-    public WorkAssignment(String company, String jobDescription, Date startDate, Date endDate, Employee employee) {
+    
+    public WorkAssignment(String company, String position, String jobDescription, Date startDate, Date endDate, Employee employee) {
         this.company = company;
+        this.position = position;
         this.jobDescription = jobDescription;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -101,6 +107,14 @@ public class WorkAssignment implements Serializable {
 
     public void setCompany(String company) {
         this.company = company;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
     }
 
     public String getJobDescription() {

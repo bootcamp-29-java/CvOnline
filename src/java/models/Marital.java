@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author hp
+ * @author Wehijin
  */
 @Entity
 @Table(name = "tb_m_marital")
@@ -41,7 +41,7 @@ public class Marital implements Serializable {
     @Basic(optional = false)
     @Column(name = "name")
     private String name;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "marital", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "marital", fetch = FetchType.LAZY)
     private List<Employee> employeeList;
 
     public Marital() {

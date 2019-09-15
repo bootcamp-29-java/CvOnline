@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author hp
+ * @author Wehijin
  */
 @Entity
 @Table(name = "tb_tr_employee_skill")
@@ -42,12 +42,12 @@ public class EmployeeSkill implements Serializable {
     @Basic(optional = false)
     @Column(name = "score")
     private int score;
-    @JoinColumn(name = "skill", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private Skill skill;
     @JoinColumn(name = "employee", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Employee employee;
+    @JoinColumn(name = "skill", referencedColumnName = "id")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private Skill skill;
 
     public EmployeeSkill() {
     }
@@ -60,7 +60,7 @@ public class EmployeeSkill implements Serializable {
         this.id = id;
         this.score = score;
     }
-
+    
     public EmployeeSkill(int score, Skill skill, Employee employee) {
         this.score = score;
         this.skill = skill;
@@ -83,20 +83,20 @@ public class EmployeeSkill implements Serializable {
         this.score = score;
     }
 
-    public Skill getSkill() {
-        return skill;
-    }
-
-    public void setSkill(Skill skill) {
-        this.skill = skill;
-    }
-
     public Employee getEmployee() {
         return employee;
     }
 
     public void setEmployee(Employee employee) {
         this.employee = employee;
+    }
+
+    public Skill getSkill() {
+        return skill;
+    }
+
+    public void setSkill(Skill skill) {
+        this.skill = skill;
     }
 
     @Override

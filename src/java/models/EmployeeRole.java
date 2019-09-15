@@ -22,13 +22,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Lenovo
+ * @author Wehijin
  */
 @Entity
 @Table(name = "tb_tr_employee_role")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "EmployeeRole.findAll", query = "SELECT e FROM EmployeeRole e")})
+    @NamedQuery(name = "EmployeeRole.findAll", query = "SELECT e FROM EmployeeRole e")
+    , @NamedQuery(name = "EmployeeRole.findById", query = "SELECT e FROM EmployeeRole e WHERE e.id = :id")})
 public class EmployeeRole implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -37,12 +38,12 @@ public class EmployeeRole implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @JoinColumn(name = "role", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private Role role;
     @JoinColumn(name = "employee", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Employee employee;
+    @JoinColumn(name = "role", referencedColumnName = "id")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private Role role;
 
     public EmployeeRole() {
     }
@@ -50,27 +51,19 @@ public class EmployeeRole implements Serializable {
     public EmployeeRole(Integer id) {
         this.id = id;
     }
-
-    public Integer getId() {
-        return id;
-    }
     
     public EmployeeRole(Employee employee, Role role) {
         this.id = id;
         this.employee = employee;
         this.role = role;
     }
-    
+
+    public Integer getId() {
+        return id;
+    }
+
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
     }
 
     public Employee getEmployee() {
@@ -79,6 +72,14 @@ public class EmployeeRole implements Serializable {
 
     public void setEmployee(Employee employee) {
         this.employee = employee;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     @Override

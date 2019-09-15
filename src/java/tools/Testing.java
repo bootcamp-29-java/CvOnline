@@ -9,7 +9,7 @@ import controllers.AwardController;
 import controllers.CertificationController;
 import controllers.EmployeeController;
 import controllers.EmployeeLanguageController;
-import controllers.EmployeeSkillCotroller;
+import controllers.EmployeeSkillController;
 import controllers.ExperienceController;
 import controllers.LoginRegisterController;
 import controllers.OrganizationController;
@@ -52,16 +52,18 @@ import org.hibernate.SessionFactory;
  * @author Reza
  */
 public class Testing {
-    
-//    public static void show() {
-//        GeneralDAO<Employee> gdao = new GeneralDAO<>(HibernateUtil.getSessionFactory(), Employee.class);
-//        for (Employee employee : gdao.getAll()) {
-//            System.out.println(employee.getId() + " - " + employee.getFirstName());
-//        }
-//    }
+    public static void show() {
+        GeneralDAO<Employee> gdao = new GeneralDAO<>(HibernateUtil.getSessionFactory(), Employee.class);
+        for (Employee employee : gdao.getAll()) {
+            System.out.println(employee.getId() + " - " + employee.getFirstName());
+        }
+    }
     
     public static void main(String[] args) throws ParseException, FileNotFoundException {
         SessionFactory factory = HibernateUtil.getSessionFactory();
+        
+//        show();
+        
 //        System.out.println(factory);
 //        LoginRegisterDAO dao = new LoginRegisterDAO(factory);
 //        Account account = dao.getByEmail("mii.bootcamp29@gmail.com");
@@ -113,14 +115,14 @@ public class Testing {
 //        System.out.println(igdao.getAll());
         AwardController ac = new AwardController(factory);
         CertificationController c = new CertificationController(factory);
-//        System.out.println(c.save("asd", 1, "3"));
+//        System.out.println(c.save("asd", null, "1", "11"));
         OrganizationController o = new OrganizationController(factory);
 //        System.out.println(o.save("asd", "ketua", "2016-06-16", "2017-09-19", "5"));
         WorkAssignmentController wac = new WorkAssignmentController(factory);
 //        System.out.println(wac.saveOrDelete("asd", "asd", "2019-05-12", "2019-09-12", "3"));
         EmployeeLanguageController elc = new EmployeeLanguageController(factory);
-//        System.out.println(elc.save("in", "5"));
-        EmployeeSkillCotroller esc =  new EmployeeSkillCotroller(factory);
+//        System.out.println(elc.save("9", "in"));
+        EmployeeSkillController esc =  new EmployeeSkillController(factory);
 //        System.out.println(esc.save(80, "3", "5"));
         ExperienceController ec = new ExperienceController(factory);
 //        System.out.println(ec.save("LOMBA", "2019", "5"));
@@ -166,7 +168,6 @@ public class Testing {
         EmployeeController ec1 = new EmployeeController(factory);
 //        System.out.println(ec1.savePersonalData("12", "1", "1", "asd", "asd", "asd@gmail.com", "salatiga", "2019-09-09", "Male", "WNI", null, true));
 
-        
         
 
     }

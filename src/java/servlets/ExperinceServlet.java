@@ -5,8 +5,8 @@
  */
 package servlets;
 
-import controllers.LoginRegisterController;
-import icontrollers.ILoginRegisterController;
+import controllers.ExperienceController;
+import icontrollers.IExperienceController;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -19,14 +19,14 @@ import tools.HibernateUtil;
 
 /**
  *
- * @author ASUS
+ * @author hp
  */
-@WebServlet(name = "VerifikasiServlet", urlPatterns = {"/verifikasiservlet"})
-public class VerifikasiServlet extends HttpServlet {
+@WebServlet(name = "ExperinceServlet", urlPatterns = {"/experienceservlet"})
+public class ExperinceServlet extends HttpServlet {
 
     private String status;
     private SessionFactory factory = HibernateUtil.getSessionFactory();
-    private ILoginRegisterController ilrc = new LoginRegisterController(factory);
+    private IExperienceController iec = new ExperienceController(factory);
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,16 +41,7 @@ public class VerifikasiServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet VerifikasiServlet</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet VerifikasiServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+            
         }
     }
 
@@ -66,9 +57,6 @@ public class VerifikasiServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String token = request.getParameter("v");
-        request.getSession().setAttribute("token", token);
-        response.sendRedirect("reset-password.jsp?v=" + token);
         processRequest(request, response);
     }
 
@@ -83,18 +71,17 @@ public class VerifikasiServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String newPassword = request.getParameter("newPassword");
-        String confirmPass = request.getParameter("confirmPass");
-        String token = request.getParameter("token");
+        String id = request.getParameter("inputID");
+        String exName = request.getParameter("exName");
+        String date = request.getParameter("date");
 
-        status = ilrc.updateByToken(token, newPassword);
-        if (status.equals("Password Sudah Dirubah")) {
-            request.getSession().setAttribute("status", status);
-            response.sendRedirect("admin/login.jsp");
+        status = iec.save(exName, date, id);
+
+        if (status.equalsIgnoreCase("Save data berhasil")) {
+            request.getSession().setAttribute("status1", status);
+            response.sendRedirect("cv-online.jsp");
         } else {
-            request.getSession().setAttribute("status", status);
-            response.sendRedirect("admin/login.jsp");
-            processRequest(request, response);
+            request.getSession().setAttribute("status1", "GAGAL");
         }
         processRequest(request, response);
     }

@@ -5,18 +5,10 @@
  */
 package servlets;
 
-import controllers.CategoryController;
-import controllers.EmployeeController;
-import controllers.LanguageController;
-import controllers.MaritalController;
-import controllers.ReligionController;
-import controllers.SkillController;
-import icontrollers.ICategoryController;
-import icontrollers.IEmployeeController;
-import icontrollers.ILanguageController;
-import icontrollers.IMaritalController;
-import icontrollers.IReligionController;
-import icontrollers.ISkillController;
+import controllers.EducationController;
+import controllers.EducationHistoryController;
+import icontrollers.IEducationController;
+import icontrollers.IEducationHistoryController;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -31,19 +23,13 @@ import tools.HibernateUtil;
  *
  * @author hp
  */
-@WebServlet(name = "CVServlet", urlPatterns = {"/cvservlet"})
-public class CVServlet extends HttpServlet {
+@WebServlet(name = "EducationServlet", urlPatterns = {"/educationservlet"})
+public class EducationServlet extends HttpServlet {
 
     private String status;
-    private String cv_status;
     private SessionFactory factory = HibernateUtil.getSessionFactory();
-    private IEmployeeController iec = new EmployeeController(factory);
-    private IReligionController irc = new ReligionController(factory);
-    private IMaritalController imc = new MaritalController(factory);
-    private ILanguageController ilc = new LanguageController(factory);
-    private ICategoryController icc = new CategoryController(factory);
-    private ISkillController isc = new SkillController(factory);
-
+    private IEducationHistoryController iehc = new EducationHistoryController(factory);
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -57,15 +43,7 @@ public class CVServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            request.getSession().setAttribute("employees", iec.getAll());
-            request.getSession().setAttribute("maritals", imc.getAll());
-            request.getSession().setAttribute("religions", irc.getAll());
-            request.getSession().setAttribute("languages", ilc.getAll());
-            request.getSession().setAttribute("categorys", icc.getAll());
-            request.getSession().setAttribute("skills", isc.getAll());
-//            request.getSession().setAttribute("employeeId", iec.genId());
-//            request.getSession().setAttribute("cv_status", "1");
-            response.sendRedirect("cv-online.jsp");
+            
         }
     }
 
@@ -95,6 +73,18 @@ public class CVServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String id = request.getParameter("inputID");
+        String languageID = request.getParameter("languageId");
+        
+//        status = iehc.save(id, attachment, status, id);
+
+        if (status.equalsIgnoreCase("Save data berhasil")) {
+            request.getSession().setAttribute("status1", status);
+            response.sendRedirect("cv-online.jsp");
+        } else {
+            request.getSession().setAttribute("status1", "GAGAL");
+        }
+        
         processRequest(request, response);
     }
 

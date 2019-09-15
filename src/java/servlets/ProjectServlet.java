@@ -5,35 +5,28 @@
  */
 package servlets;
 
-import controllers.EmployeeRoleController;
-import controllers.LoginRegisterController;
-import icontrollers.ILoginRegisterController;
+import controllers.ProjectController;
+import icontrollers.IProjectController;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import models.Account;
-import models.EmployeeRole;
 import org.hibernate.SessionFactory;
 import tools.HibernateUtil;
 
 /**
  *
- * @author Wehijin
+ * @author hp
  */
-@WebServlet(name = "LoginServlet", urlPatterns = {"/loginservlet"})
-public class LoginServlet extends HttpServlet {
-    
-    private SessionFactory factory = HibernateUtil.getSessionFactory();
-    private ILoginRegisterController ilrc = new LoginRegisterController(factory);
-    private EmployeeRoleController erc = new EmployeeRoleController(factory);
+@WebServlet(name = "ProjectServlet", urlPatterns = {"/projectservlet"})
+public class ProjectServlet extends HttpServlet {
+
     private String status;
+    private SessionFactory factory = HibernateUtil.getSessionFactory();
+    private IProjectController ipc = new ProjectController(factory);
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -48,16 +41,7 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet LoginServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet LoginServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+            
         }
     }
 
@@ -73,14 +57,6 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String action = request.getParameter("action");
-        HttpSession session = request.getSession(true);
-        if (action.equalsIgnoreCase("logout")) {
-            session.getAttribute("sessionlogin");
-            session.invalidate();
-            request.getSession().setAttribute("status", "Anda Telah Logout");
-            response.sendRedirect("login.jsp");
-        }
         processRequest(request, response);
     }
 
@@ -95,25 +71,21 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
+        String id = request.getParameter("inputID");
+        String projectName = request.getParameter("projectName");
+        String description = request.getParameter("description");
+        String startDate = request.getParameter("startDate");
+        String endDate = request.getParameter("endDate");
 
-        status = ilrc.login(email, password);
-        List<String> sessionRole = new ArrayList<>();
-        for (EmployeeRole empl : erc.getById(email)) {
-            sessionRole.add(String.valueOf(empl.getRole().getId()));
-        }
-        if (status.equalsIgnoreCase("Login Berhasil") && sessionRole != null) {
-            request.getSession().setAttribute("sessionlogin", sessionRole);
-            request.getSession().setAttribute("status", status);
-            Account account = ilrc.getByEmail(email);
-            request.getSession().setAttribute("nik", account.getId());
-            request.getSession().setAttribute("sessionId", account.getId());
-            response.sendRedirect("employeeservlet");
+        status = ipc.save(projectName, startDate, endDate, description, id);
+
+        if (status.equalsIgnoreCase("Save data berhasil")) {
+            request.getSession().setAttribute("status1", status);
+            response.sendRedirect("cv-online.jsp");
         } else {
-            request.getSession().setAttribute("status", status);
-            response.sendRedirect("login.jsp");
+            request.getSession().setAttribute("status1", "GAGAL");
         }
+        
         processRequest(request, response);
     }
 

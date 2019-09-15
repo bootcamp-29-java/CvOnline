@@ -5,10 +5,10 @@
  */
 package servlets;
 
-import controllers.AccountController;
-import controllers.EmployeeController;
-import icontrollers.IAccountController;
-import icontrollers.IEmployeeController;
+import controllers.AwardController;
+import controllers.ExperienceController;
+import icontrollers.IAwardController;
+import icontrollers.IExperienceController;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -16,22 +16,19 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.hibernate.Hibernate;
 import org.hibernate.SessionFactory;
-import tools.AllMethod;
 import tools.HibernateUtil;
 
 /**
  *
- * @author Lenovo
+ * @author hp
  */
-@WebServlet(name = "ResgisterServlet", urlPatterns = {"/registerservlet"})
-public class RegisterServlet extends HttpServlet {
+@WebServlet(name = "AwardServlet", urlPatterns = {"/awardservlet"})
+public class AwardServlet extends HttpServlet {
+
     private String status;
     private SessionFactory factory = HibernateUtil.getSessionFactory();
-    private IEmployeeController iec = new EmployeeController(factory);
-    private IAccountController iac = new AccountController(factory);
-    
+    private IAwardController iac = new AwardController(factory);
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -46,7 +43,7 @@ public class RegisterServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            
+
         }
     }
 
@@ -76,25 +73,17 @@ public class RegisterServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String id = request.getParameter("id");
-        String firstName = request.getParameter("firstName");
-        String lastName = request.getParameter("lastName");
-        String email = request.getParameter("email");
-        String birthPlace = request.getParameter("birthPlace");
-        String birthDate = request.getParameter("birthDate");
-        String gender = request.getParameter("gender");
-        String nationality = request.getParameter("nationality");
-        String token = AllMethod.generateToken();
-        status = iec.save(id, firstName, lastName, email, birthPlace, birthDate, gender, nationality, email, false);
+        String id = request.getParameter("inputID");
+        String awardName = request.getParameter("awardName");
+        String date = request.getParameter("date");
+
+        status = iac.save(awardName, date, id);
+
         if (status.equalsIgnoreCase("Save data berhasil")) {
-            if (iac.createAccount(id, "", token, "-1", "").equalsIgnoreCase("Berhasil")) {
-                AllMethod.sendEmail(email, firstName+" "+lastName, token);
-                request.getSession().setAttribute("status", status);
-                response.sendRedirect("index.jsp");
-            }else{
-                request.getSession().setAttribute("status", status);
-                response.sendRedirect("index.jsp");
-            }
+            request.getSession().setAttribute("status1", status);
+            response.sendRedirect("cv-online.jsp");
+        } else {
+            request.getSession().setAttribute("status1", "GAGAL");
         }
         processRequest(request, response);
     }
